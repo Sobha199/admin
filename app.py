@@ -45,7 +45,7 @@ else:
         # Overall HC
         total_employees = df["Emp Id"].nunique()
         total_login_ids = df["Emp Id"].count()
-        df.columns = df.columns.str.strip()  # (Optional, but good practice)
+        df.columns = df.columns.str.strip() 
         active_count = df[df["Emp Status"].str.lower() == "active"].shape[0]
         inactive_count = df[df["Emp Status"].str.lower() == "inactive"].shape[0]
         total_charts = df["Chart Count"].sum()
