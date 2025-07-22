@@ -45,9 +45,9 @@ else:
         # Overall HC
         total_employees = df["Emp Id"].nunique()
         total_login_ids = df["Emp Id"].count()
-        st.write("CSV columns:", df.columns.tolist())
-        active_count = df[df["lower"].str.lower() == "active"].shape[0]
-        inactive_count = df[df["lower."].str.lower() == "inactive"].shape[0]
+        df.columns = df.columns.str.strip()  # (Optional, but good practice)
+        active_count = df[df["Emp Status"].str.lower() == "active"].shape[0]
+        inactive_count = df[df["Emp Status"].str.lower() == "inactive"].shape[0]
         total_charts = df["Chart Count"].sum()
         total_icd = df["ICD"].sum()
         total_pages = df["Pages"].sum()
