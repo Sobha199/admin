@@ -43,14 +43,30 @@ else:
         st.title("📊 Dashboard")
 
         # Overall HC
-        total_employees = df["Emp Id"].nunique()
-        total_login_ids = df["Emp Id"].count()
-        df.columns = df.columns.str.strip() 
-        active_count = df[df["Emp Status"].str.lower() == "active"].shape[0]
-        inactive_count = df[df["Emp Status"].str.lower() == "inactive"].shape[0]
-        total_charts = df["Chart Count"].sum()
-        total_icd = df["ICD"].sum()
-        total_pages = df["Pages"].sum()
+        st.set_page_config(page_title="Dashboard", page_icon="📊", layout="wide")
+
+st.markdown("<h1 style='color:white;'>📊 Dashboard</h1>", unsafe_allow_html=True)
+
+# Read tracking.csv
+df = pd.read_csv("data/Tracking.csv")
+
+# Clean column names
+df.columns = df.columns.str.strip()
+
+# Check and rename if necessary
+if "Emp Status" not in df.columns:
+    st.error("Column 'Emp Status' not found in Tracking.csv.")
+else:
+    # Drop duplicate columns if any
+    df = df.loc[:, ~df.columns.duplicated()]
+
+    # Display total employees and active count
+    total_employees = df["Emp ID"].nunique() if "Emp ID" in df.columns else 0
+    active_count = df[df["Emp Status"].str.lower() == "active"].shape[0]
+
+    col1, col2 = st.columns(2)
+    col1.metric("Total Employees", total_employees)
+    col2.metric("Active Employees", active_count)
 
         st.metric("Total Headcount", total_employees)
         st.metric("Total Login IDs", total_login_ids)
@@ -82,6 +98,25 @@ else:
                 df.to_excel(writer, index=False, sheet_name='Overview')
             output.seek(0)
             return output
+            import streamlit as st
+import pandas as pd
+
+st.set_page_config(page_title="Overview", page_icon="📄", layout="wide")
+
+st.markdown("<h1 style='color:white;'>📄 Overview</h1>", unsafe_allow_html=True)
+
+# Read tracking.csv
+df = pd.read_csv("data/Tracking.csv")
+
+# Clean column names and drop duplicates
+df.columns = df.columns.str.strip()
+df = df.loc[:, ~df.columns.duplicated()]
+
+# Show dataframe
+st.dataframe(df)
+
+# Download button for Excel export
+st.download_button("Download Excel", df.to_excel(index=False), "tracking_overview.xlsx")
 
         st.download_button(
             label="📥 Download Overview as Excel",
